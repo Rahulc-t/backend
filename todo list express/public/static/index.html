@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="./index.css">
+</head>
+<body>
+    <h1>To do list</h1>
+   <!-- <form action="index.php" method="post"> -->
+        <input type="text" name="" id="task">
+        <button id="add" onclick="addTask()">submit</button>
+        <div id="display"></div>
+    <!-- </form> -->
+    <script>
+        function addTask(){
+            const task= document.getElementById("task").value
+            fetch("/",{
+                method:"POST",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify({todo:task})
+                
+                
+
+            })
+            .then(console.log(task))
+            display()
+            document.getElementById("task").value=""
+        }
+        function display(){
+            let list=document.getElementById("display")
+            list.innerHTML=''
+            fetch("/view")
+            .then(res=>res.json())
+            .then(data=>{
+                
+                for(let i=0;i<data.length;i++){
+                    let li=document.createElement("li")
+                    JSON.stringify(data)
+                    console.log(data[i])
+                    li.innerHTML=data[i]
+                    let edit=document.createElement("button")
+                    edit.textContent='edit'
+                    edit.classList.add('edits')
+                    edit.onclick=function(){
+                        newTask=prompt("enter new task:",data[i].todo)
+                        fetch(`/${i}`,{
+                            method:"PUT",
+                            headers:{
+                                "Content-Type":"application/json"
+                                },
+                                body:JSON.stringify({todo:newTask})
+                        })
+                        .then(console.log("updated"))
+                        display()
+                    }
+                    let deleteBtn=document.createElement("button")
+                    deleteBtn.textContent="delete"
+                    deleteBtn.classList.add('dels')
+                    deleteBtn.onclick=function(){
+                        fetch(`/${i}`,{
+                            method:"DELETE",
+                            headers:{
+                                "Content-Type":"application/json"
+                                }
+                                })
+                                .then(console.log("deleted"))
+                                display()
+                                }
+                                li.append(edit,deleteBtn)
+                                list.append(li)
+                                
+                    
+                }
+            })
+        }
+    </script>
+</body>
+</html>
