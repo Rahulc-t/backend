@@ -46,7 +46,8 @@
                     edit.textContent='edit'
                     edit.classList.add('edits')
                     edit.onclick=function(){
-                        newTask=prompt("enter new task:",data[i].todo)
+                        let temp=data[i]
+                        newTask=prompt("enter new task:",temp)
                         fetch(`/${i}`,{
                             method:"PUT",
                             headers:{

@@ -30,12 +30,12 @@ app.get("/view", (req, res) => {
 app.put("/:id", (req, res) => {
     const id = req.params.id;
     //const data = todoList[id - 1];
-    todoList[id - 1] = req.body.todo;
+    todoList[id] = req.body.todo;
     res.send(todoList);
 });
 
 app.delete("/:id",(req,res)=>{
     const id = req.params.id;
-    todoList.splice(id-1,1)
+    todoList.splice(id,1)
     res.send(todoList)
 })
